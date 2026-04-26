@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
 import { RichTextEditor } from "./RichTextEditor";
 import { adminUpsertPage } from "@/lib/admin/actions";
@@ -229,12 +230,12 @@ export function PageForm({ page }: Props) {
         >
           {pending ? "Saving…" : page ? "Save changes" : "Create page"}
         </button>
-        <a
+        <Link
           href="/admin/pages"
           className="px-5 py-2.5 border border-gray-300 text-gray-700 text-sm rounded-md hover:bg-gray-50 transition-colors"
         >
           Cancel
-        </a>
+        </Link>
       </div>
     </form>
   );

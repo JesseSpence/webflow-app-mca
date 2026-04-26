@@ -36,6 +36,7 @@ export function RichTextEditor({ name, defaultValue = "", placeholder, label }: 
     if (!isHtml) {
       editor.commands.setContent(rawHtml);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- only when toggling rich vs HTML mode
   }, [isHtml]);
 
   const toolbarBtn = (action: () => boolean, label: string, active?: boolean) => (

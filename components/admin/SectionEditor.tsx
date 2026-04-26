@@ -21,7 +21,7 @@ export function SectionEditor({ pageSlug, sections: initial }: Props) {
     try {
       await adminDeleteSection(id, pageSlug);
       setSections((prev) => prev.filter((s) => s.id !== id));
-    } catch (e) {
+    } catch {
       setError("Delete failed");
     }
   }
@@ -35,7 +35,7 @@ export function SectionEditor({ pageSlug, sections: initial }: Props) {
       setAdding(false);
       setEditingId(null);
       window.location.reload();
-    } catch (e) {
+    } catch {
       setError("Save failed");
     }
   }

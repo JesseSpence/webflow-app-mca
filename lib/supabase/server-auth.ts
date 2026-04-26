@@ -18,7 +18,7 @@ export async function createSupabaseAuthClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Server components cannot set cookies — proxy.ts handles this
+            // Server components cannot set cookies — middleware handles refresh
           }
         },
       },

@@ -1,0 +1,132 @@
+/
+├── /merchant-cash-advance
+├── /calculator
+├── /eligibility
+├── /compare
+│   ├── /compare/merchant-cash-advance-vs-asset-finance
+│   ├── /compare/merchant-cash-advance-vs-business-credit-card
+│   ├── /compare/merchant-cash-advance-vs-business-loan
+│   ├── /compare/merchant-cash-advance-vs-invoice-finance
+│   ├── /compare/merchant-cash-advance-vs-line-of-credit
+│   ├── /compare/merchant-cash-advance-vs-overdraft
+│   ├── /compare/merchant-cash-advance-vs-revenue-based-finance
+│   ├── /compare/merchant-cash-advance-vs-start-up-loan
+│   ├── /compare/merchant-cash-advance-vs-unsecured-business-loan
+│   └── /compare/merchant-cash-advance-vs-working-capital-loan
+├── /guides
+│   ├── /guides/business-cash-advance-explained
+│   ├── /guides/can-ecommerce-businesses-get-a-merchant-cash-advance
+│   ├── /guides/can-you-top-up-a-merchant-cash-advance
+│   ├── /guides/card-terminal-loan-explained
+│   ├── /guides/does-a-merchant-cash-advance-affect-credit-score
+│   ├── /guides/how-does-a-merchant-cash-advance-work
+│   ├── /guides/how-fast-is-a-merchant-cash-advance
+│   ├── /guides/how-much-can-i-borrow
+│   ├── /guides/is-a-merchant-cash-advance-right-for-my-business
+│   ├── /guides/merchant-cash-advance-eligibility
+│   ├── /guides/merchant-cash-advance-for-seasonal-businesses
+│   ├── /guides/merchant-cash-advance-for-working-capital
+│   ├── /guides/merchant-cash-advance-pros-and-cons
+│   ├── /guides/merchant-cash-advance-rates-and-fees
+│   ├── /guides/merchant-cash-advance-regulation-in-the-uk
+│   ├── /guides/merchant-cash-advance-repayments
+│   ├── /guides/merchant-cash-advance-vs-traditional-loans
+│   ├── /guides/merchant-cash-advance-with-bad-credit
+│   ├── /guides/minimum-card-sales-required
+│   ├── /guides/revenue-based-finance-vs-merchant-cash-advance
+│   ├── /guides/what-is-a-factor-rate
+│   └── /guides/what-is-a-merchant-cash-advance
+├── /faqs
+│   ├── /faqs/can-ecommerce-businesses-get-an-mca
+│   ├── /faqs/can-i-get-an-mca-with-bad-credit
+│   ├── /faqs/can-i-top-up-an-existing-mca
+│   ├── /faqs/do-i-need-a-card-machine
+│   ├── /faqs/do-i-need-a-personal-guarantee
+│   ├── /faqs/do-i-need-collateral
+│   ├── /faqs/how-does-repayment-work
+│   ├── /faqs/how-much-can-i-borrow
+│   ├── /faqs/how-quickly-can-i-get-funding
+│   ├── /faqs/is-a-merchant-cash-advance-a-loan
+│   ├── /faqs/is-a-merchant-cash-advance-regulated-in-the-uk
+│   ├── /faqs/is-an-mca-good-for-seasonal-businesses
+│   ├── /faqs/what-businesses-qualify
+│   ├── /faqs/what-happens-if-sales-drop
+│   ├── /faqs/what-is-a-factor-rate
+│   └── /faqs/what-is-a-merchant-cash-advance
+├── /use-cases
+│   ├── /use-cases/emergency-repairs
+│   ├── /use-cases/equipment
+│   ├── /use-cases/expansion
+│   ├── /use-cases/inventory
+│   ├── /use-cases/marketing
+│   ├── /use-cases/payroll
+│   ├── /use-cases/renovations
+│   ├── /use-cases/seasonal-cash-flow
+│   ├── /use-cases/stock-purchases
+│   └── /use-cases/tax-bills
+├── /types
+│   ├── /types/bad-credit
+│   ├── /types/business-cash-advance
+│   ├── /types/card-terminal-loan
+│   ├── /types/fast-funding
+│   ├── /types/high-turnover
+│   ├── /types/large-advance
+│   ├── /types/online-sales
+│   ├── /types/renewal
+│   ├── /types/same-day
+│   ├── /types/seasonal-business
+│   ├── /types/short-term
+│   ├── /types/small-advance
+│   ├── /types/top-up
+│   └── /types/unsecured
+├── /sectors
+│   ├── /sectors/auto-repair
+│   ├── /sectors/bakery
+│   ├── /sectors/barber
+│   ├── /sectors/cafe
+│   ├── /sectors/construction
+│   ├── /sectors/convenience-store
+│   ├── /sectors/dental-practice
+│   ├── /sectors/ecommerce
+│   ├── /sectors/florist
+│   ├── /sectors/gym-fitness
+│   ├── /sectors/hotel
+│   ├── /sectors/manufacturer
+│   ├── /sectors/mot-garage
+│   ├── /sectors/newsagent
+│   ├── /sectors/off-licence
+│   ├── /sectors/pub-bar
+│   ├── /sectors/restaurant
+│   ├── /sectors/retail
+│   ├── /sectors/salon
+│   ├── /sectors/spa-beauty
+│   ├── /sectors/takeaway
+│   └── /sectors/taxi-transport
+└── /solutions
+    ├── /solutions/bad-credit
+    │   ├── /solutions/bad-credit/auto-repair
+    │   ├── /solutions/bad-credit/bakery
+    │   ├── /solutions/bad-credit/barber
+    │   ├── /solutions/bad-credit/cafe
+    │   ├── /solutions/bad-credit/construction
+    │   ├── /solutions/bad-credit/convenience-store
+    │   ├── /solutions/bad-credit/dental-practice
+    │   ├── /solutions/bad-credit/ecommerce
+    │   ├── /solutions/bad-credit/florist
+    │   ├── /solutions/bad-credit/gym-fitness
+    │   ├── /solutions/bad-credit/hotel
+    │   ├── /solutions/bad-credit/manufacturer
+    │   ├── /solutions/bad-credit/mot-garage
+    │   ├── /solutions/bad-credit/newsagent
+    │   ├── /solutions/bad-credit/off-licence
+    │   ├── /solutions/bad-credit/pub-bar
+    │   ├── /solutions/bad-credit/restaurant
+    │   ├── /solutions/bad-credit/retail
+    │   ├── /solutions/bad-credit/salon
+    │   ├── /solutions/bad-credit/spa-beauty
+    │   ├── /solutions/bad-credit/takeaway
+    │   └── /solutions/bad-credit/taxi-transport
+    ├── /solutions/same-day
+    ├── /solutions/top-up
+    ├── /solutions/renewal
+    └── /solutions/unsecured

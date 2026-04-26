@@ -1,0 +1,299 @@
+{
+  "version": "1.0.0",
+  "description": "Strict n8n workflow contracts for MCA Phase 1 content publishing",
+  "global": {
+    "publish_modes": ["page", "section_only", "faq_only", "hold"],
+    "required_sequence_for_page_mode": [
+      "POST /api/pages/upsert",
+      "POST /api/pages/section (for each section)",
+      "POST /api/pages/faq (for each faq)",
+      "POST /api/pages/publish",
+      "POST /api/revalidate"
+    ],
+    "required_sequence_for_section_only": [
+      "POST /api/pages/section (for each section)",
+      "POST /api/pages/faq (optional)",
+      "POST /api/revalidate"
+    ],
+    "required_sequence_for_faq_only": [
+      "POST /api/pages/faq (for each faq)",
+      "POST /api/revalidate"
+    ],
+    "hold_mode_behavior": "Only call POST /api/keywords/upsert with usage_type=hold. Do not call page/section/faq/publish routes."
+  },
+  "contracts": {
+    "common_page_payload": {
+      "endpoint": "POST /api/pages/upsert",
+      "required_fields": [
+        "slug",
+        "full_path",
+        "page_template",
+        "page_group",
+        "title",
+        "meta_title",
+        "meta_description",
+        "h1",
+        "status",
+        "indexable",
+        "publish_mode"
+      ],
+      "optional_fields": ["intro_html", "body_html", "canonical_url"],
+      "rules": {
+        "title_max_chars": 70,
+        "meta_title_max_chars": 60,
+        "meta_description_range_chars": [110, 165],
+        "canonical_url_must_match_path_or_primary_canonical": true,
+        "status_allowed": ["draft", "published", "archived"],
+        "publish_mode_allowed": ["page", "section_only", "faq_only", "hold"]
+      }
+    },
+    "section_payload": {
+      "endpoint": "POST /api/pages/section",
+      "required_fields": ["target_page_slug", "section_key", "content_html", "sort_order"],
+      "optional_fields": ["section_label", "heading", "keyword_theme"]
+    },
+    "faq_payload": {
+      "endpoint": "POST /api/pages/faq",
+      "required_fields": ["target_page_slug", "question", "answer_html", "schema_enabled"],
+      "optional_fields": ["keyword"],
+      "rules": {
+        "question_min_chars": 10,
+        "question_max_chars": 140,
+        "answer_html_min_chars": 80
+      }
+    }
+  },
+  "templates": {
+    "type": {
+      "route_pattern": "/types/{slug}",
+      "page_group": "types",
+      "required_section_keys": [
+        "hero",
+        "definition",
+        "suitability",
+        "repayment",
+        "speed",
+        "eligibility",
+        "pros_cons",
+        "use_cases",
+        "sector_fit",
+        "related_links"
+      ],
+      "recommended_order": [
+        "hero",
+        "definition",
+        "suitability",
+        "repayment",
+        "speed",
+        "eligibility",
+        "pros_cons",
+        "use_cases",
+        "sector_fit",
+        "related_links"
+      ],
+      "min_faq_count": 3,
+      "fail_conditions": [
+        "Any required_section_keys missing",
+        "Section keys present but out of recommended_order index without explicit override",
+        "Duplicate section_key within same page payload",
+        "meta_title missing primary keyword phrase",
+        "intro_html empty",
+        "Less than 3 FAQs when publish_mode=page"
+      ]
+    },
+    "sector": {
+      "route_pattern": "/sectors/{slug}",
+      "page_group": "sectors",
+      "required_section_keys": [
+        "hero",
+        "sector_need",
+        "cashflow_gaps",
+        "use_cases",
+        "repayment_fit",
+        "eligibility",
+        "related_types",
+        "related_links"
+      ],
+      "recommended_order": [
+        "hero",
+        "sector_need",
+        "cashflow_gaps",
+        "use_cases",
+        "repayment_fit",
+        "eligibility",
+        "related_types",
+        "related_links"
+      ],
+      "min_faq_count": 3,
+      "fail_conditions": [
+        "Any required_section_keys missing",
+        "No cashflow_gaps section",
+        "No related_types section",
+        "H1 does not include sector intent phrase",
+        "Duplicate section_key within same page payload",
+        "Less than 3 FAQs when publish_mode=page"
+      ]
+    },
+    "guide": {
+      "route_pattern": "/guides/{slug}",
+      "page_group": "guides",
+      "required_section_keys": [
+        "hero",
+        "summary",
+        "process_steps",
+        "costs",
+        "repayment",
+        "pros_cons",
+        "alternatives",
+        "cta"
+      ],
+      "recommended_order": [
+        "hero",
+        "summary",
+        "process_steps",
+        "costs",
+        "repayment",
+        "pros_cons",
+        "alternatives",
+        "cta"
+      ],
+      "min_faq_count": 2,
+      "fail_conditions": [
+        "Any required_section_keys missing",
+        "process_steps section missing",
+        "No alternatives section",
+        "Duplicate section_key within same page payload",
+        "Less than 2 FAQs when publish_mode=page"
+      ]
+    },
+    "comparison": {
+      "route_pattern": "/compare/{slug}",
+      "page_group": "compare",
+      "required_section_keys": [
+        "hero",
+        "quick_verdict",
+        "comparison_table",
+        "when_mca_wins",
+        "when_other_wins",
+        "cost_comparison",
+        "speed_comparison",
+        "eligibility_comparison",
+        "cta"
+      ],
+      "recommended_order": [
+        "hero",
+        "quick_verdict",
+        "comparison_table",
+        "when_mca_wins",
+        "when_other_wins",
+        "cost_comparison",
+        "speed_comparison",
+        "eligibility_comparison",
+        "cta"
+      ],
+      "min_faq_count": 2,
+      "fail_conditions": [
+        "Any required_section_keys missing",
+        "comparison_table section missing",
+        "No when_mca_wins or when_other_wins section",
+        "Duplicate section_key within same page payload",
+        "Less than 2 FAQs when publish_mode=page"
+      ]
+    },
+    "faq": {
+      "route_pattern": "/faqs/{slug}",
+      "page_group": "faqs",
+      "required_section_keys": [
+        "hero",
+        "short_answer",
+        "expanded_answer",
+        "approval_factors",
+        "related_links",
+        "cta"
+      ],
+      "recommended_order": [
+        "hero",
+        "short_answer",
+        "expanded_answer",
+        "approval_factors",
+        "related_links",
+        "cta"
+      ],
+      "min_faq_count": 1,
+      "fail_conditions": [
+        "Any required_section_keys missing",
+        "short_answer section missing",
+        "expanded_answer section missing",
+        "Duplicate section_key within same page payload",
+        "No FAQ record created when publish_mode=faq_only"
+      ]
+    },
+    "use_case": {
+      "route_pattern": "/use-cases/{slug}",
+      "page_group": "use-cases",
+      "required_section_keys": [
+        "hero",
+        "why_this_use_case",
+        "when_it_makes_sense",
+        "risks_limits",
+        "alternatives",
+        "cta"
+      ],
+      "recommended_order": [
+        "hero",
+        "why_this_use_case",
+        "when_it_makes_sense",
+        "risks_limits",
+        "alternatives",
+        "cta"
+      ],
+      "min_faq_count": 2,
+      "fail_conditions": [
+        "Any required_section_keys missing",
+        "risks_limits section missing",
+        "alternatives section missing",
+        "Duplicate section_key within same page payload",
+        "Less than 2 FAQs when publish_mode=page"
+      ]
+    }
+  },
+  "strict_validation_for_n8n": {
+    "keyword_router_output_required_fields": [
+      "primary_keyword",
+      "publish_mode",
+      "page_template",
+      "page_group",
+      "slug",
+      "full_path",
+      "parent_page_slug"
+    ],
+    "block_on": [
+      "publish_mode/page_template mismatch",
+      "route does not match route_pattern for template",
+      "section_key not allowed for selected template",
+      "duplicate slug targeting another full_path",
+      "body text appears duplicate above threshold from existing page in same group",
+      "missing authorization token",
+      "api response status >= 400"
+    ],
+    "retry_policy": {
+      "max_retries": 3,
+      "backoff_seconds": [2, 5, 15],
+      "retry_on_status_codes": [429, 500, 502, 503, 504]
+    }
+  },
+  "example_n8n_router_output": {
+    "primary_keyword": "merchant cash advance for restaurants",
+    "secondary_keywords": [
+      "restaurant cash advance",
+      "mca loan for restaurants"
+    ],
+    "publish_mode": "page",
+    "page_template": "sector",
+    "page_group": "sectors",
+    "slug": "restaurant",
+    "full_path": "/sectors/restaurant",
+    "parent_page_slug": null,
+    "search_intent": "commercial"
+  }
+}

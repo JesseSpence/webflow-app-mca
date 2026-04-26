@@ -1,0 +1,45 @@
+"use server";
+
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+async function getSupabaseForAction() {
+  const cookieStore = await cookies();
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options),
+          );
+        },
+      },
+    },
+  );
+}
+
+export async function signIn(_prev: { error: string }, formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  const supabase = await getSupabaseForAction();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  redirect("/admin");
+}
+
+export async function signOut() {
+  const supabase = await getSupabaseForAction();
+  await supabase.auth.signOut();
+  redirect("/admin/login");
+}

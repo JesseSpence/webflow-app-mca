@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MCA Loan — Merchant Cash Advance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #13274d;
+      --blue: #0556f2;
+      --blue-soft: #ecf5ff;
+      --blue-tint: #e7efff;
+      --bg-page: #ffffff;
+      --bg-soft: #f7f8fa;
+      --bg-muted: #f3f3f3;
+      --text: #6b7280;
+      --text-strong: #333333;
+      --text-dim: #aaadb0;
+      --border: #e5e7eb;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 4px 24px rgba(19, 39, 77, 0.08);
+      --font-ui: "Inter", sans-serif;
+      --font-label: "Ubuntu", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-ui);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg-page);
+    }
+
+    .container {
+      width: min(1180px, 100% - 48px);
+      margin-inline: auto;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-label);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--navy);
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--blue), #3b82f6);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 0.75rem;
+    }
+    .nav-main {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-main a {
+      font-size: 0.95rem;
+      color: var(--text-strong);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav-main a:hover { color: var(--blue); }
+    .nav-main a.is-active { color: var(--blue); }
+    .nav-dd { display: inline-flex; align-items: center; gap: 0.25rem; cursor: default; }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* MCA calculator — dark panel (matches hero CTA) */
+    /* Outer shell: stops grid/flex columns collapsing the embed to a few px wide (Webflow/Lovable 2-col) */
+    .mca-calc-shell {
+      container-type: inline-size;
+      container-name: mca-calc;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: min(920px, 100%);
+      margin-inline: auto;
+      flex: 1 1 0%;
+      min-width: 280px;
+      align-self: stretch;
+    }
+    @media (max-width: 320px) {
+      .mca-calc-shell {
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+    }
+    .mca-calc {
+      --mca-accent: #a78bfa;
+      width: 100%;
+      max-width: 100%;
+      background: linear-gradient(165deg, #13274d 0%, #0f2244 55%, #0c1c39 100%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.5rem 1.25rem;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: #e8eefc;
+      box-shadow: 0 28px 52px rgba(8, 22, 48, 0.35);
+      box-sizing: border-box;
+    }
+    .mca-calc-inputs,
+    .mca-calc-results {
+      min-width: 0;
+    }
+    .mca-calc-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 1px minmax(200px, 34%);
+      gap: 1.25rem 1.5rem;
+      align-items: stretch;
+    }
+    .mca-calc-divider {
+      background: linear-gradient(
+        180deg,
+        transparent,
+        rgba(255, 255, 255, 0.2) 15%,
+        rgba(255, 255, 255, 0.2) 85%,
+        transparent
+      );
+      width: 1px;
+      min-height: 100%;
+    }
+    .mca-calc-panel-title {
+      margin: 0 0 1.25rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .mca-slider-block {
+      margin-bottom: 1.35rem;
+    }
+    .mca-slider-block:last-of-type {
+      margin-bottom: 0;
+    }
+    .mca-slider-caption {
+      margin: 0 0 0.5rem;
+      font-size: 0.88rem;
+      color: #b8c7e8;
+      line-height: 1.35;
+      overflow-wrap: break-word;
+    }
+    .mca-slider-caption strong {
+      color: #fff;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .mca-range {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: rgba(255, 255, 255, 0.14);
+      outline: none;
+      cursor: pointer;
+    }
+    .mca-range::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--mca-accent), #7c3aed);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+      margin-top: -6px;
+    }
+    .mca-range::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--mca-accent), #7c3aed);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+    .mca-range::-moz-range-track {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .mca-range::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .mca-calc-results {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+      padding: 0 0.25rem;
+    }
+    .mca-results-title {
+      margin: 0 0 1.25rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #94a4c8;
+    }
+    .mca-result-block {
+      margin-bottom: 1.25rem;
+    }
+    .mca-result-block:last-of-type {
+      margin-bottom: 0;
+    }
+    .mca-result-value {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.35rem, 3vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: #c4b5fd;
+      font-variant-numeric: tabular-nums;
+    }
+    .mca-result-hint {
+      margin: 0;
+      font-size: 0.7rem;
+      line-height: 1.35;
+      color: #8ca0c9;
+      max-width: 28ch;
+      margin-inline: auto;
+      overflow-wrap: break-word;
+    }
+    .mca-get-quotes-wrap {
+      margin-top: 1.35rem;
+      display: flex;
+      justify-content: center;
+    }
+    .mca-get-quotes-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 320px;
+      padding: 0.85rem 1.5rem;
+      font-family: var(--font-ui);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      background: #fff;
+      border: none;
+      border-radius: var(--radius-pill, 999px);
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+    .mca-get-quotes-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(5, 86, 242, 0.28);
+    }
+    .mca-calc-note {
+      margin: 1.15rem 0 0;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 0.7rem;
+      line-height: 1.45;
+      color: rgba(184, 199, 232, 0.65);
+      text-align: center;
+    }
+    /* Stack when viewport is narrow (mobile) */
+    @media (max-width: 900px) {
+      .mca-calc-split {
+        grid-template-columns: 1fr;
+      }
+      .mca-calc-divider {
+        display: none;
+      }
+      .mca-calc-results {
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+    }
+    /* Stack when embed is narrow (e.g. half-width / 2-column layouts) */
+    @container mca-calc (max-width: 560px) {
+      .mca-calc-split {
+        grid-template-columns: 1fr;
+        gap: 1.15rem;
+      }
+      .mca-calc-divider {
+        display: none;
+      }
+      .mca-calc-results {
+        padding-top: 0.65rem;
+        margin-top: 0.15rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      .mca-calc-panel-title {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      .mca-slider-block {
+        margin-bottom: 1.1rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .mca-calc {
+        padding: 1.1rem 0.9rem 1rem;
+        border-radius: 16px;
+      }
+      .mca-result-value {
+        font-size: 1.25rem;
+      }
+      .mca-get-quotes-btn {
+        max-width: none;
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+      }
+      .mca-calc-note {
+        font-size: 0.65rem;
+        text-align: left;
+      }
+    }
+    @media (max-width: 1100px) {
+      .mca-calc-shell {
+        max-width: none;
+      }
+    }
+    .cart-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      font-family: var(--font-ui);
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--navy);
+      color: #fff;
+    }
+    .btn-blue {
+      background: var(--blue);
+      color: #fff;
+    }
+    .btn-ghost {
+      background: #fff;
+      color: var(--text-strong);
+      border: 1px solid var(--border);
+    }
+    .btn .arrow { font-size: 1.1em; line-height: 1; }
+
+    /* Hero */
+    .hero {
+      padding: 3.5rem 0 4rem;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .nav-main { display: none; }
+      .header-actions {
+        justify-content: space-between;
+      }
+      .hero-main-cta {
+        padding: 1.2rem;
+      }
+    }
+    @media (max-width: 640px) {
+      .hero-main-cta-actions .btn {
+        width: 100%;
+      }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--blue);
+      line-height: 24px;
+      margin-bottom: 1rem;
+    }
+    .eyebrow svg { flex-shrink: 0; }
+
+    h1, h2, h3 {
+      font-family: var(--font-ui);
+      color: var(--navy);
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 0 0 1rem;
+    }
+    h1 { font-size: clamp(2rem, 4vw, 2.75rem); }
+    h2 { font-size: clamp(1.75rem, 3vw, 2.25rem); }
+    h3 { font-size: 1.15rem; }
+
+    .hero-lead {
+      font-size: 1.05rem;
+      max-width: 34ch;
+      margin-bottom: 1.75rem;
+    }
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .hero-main-cta {
+      background: linear-gradient(165deg, #13274d 0%, #0f2244 55%, #0c1c39 100%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: var(--radius-lg);
+      color: #e8eefc;
+      padding: 1.5rem;
+      box-shadow: 0 28px 52px rgba(8, 22, 48, 0.35);
+    }
+    .hero-main-cta h3 {
+      color: #ffffff;
+      font-size: 1.45rem;
+      margin-bottom: 0.45rem;
+    }
+    .hero-main-cta p {
+      margin: 1rem 0 1.1rem;
+      color: #b8c7e8;
+      font-size: 0.95rem;
+      max-width: 38ch;
+    }
+    .loan-amount-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .loan-amount-label {
+      display: block;
+      margin-bottom: 0.45rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #c5d4f4;
+      font-weight: 700;
+    }
+    .loan-amount-input-wrap {
+      position: relative;
+      margin-bottom: 0.85rem;
+    }
+    .loan-amount-input-wrap .prefix {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9bb2de;
+      font-weight: 600;
+      pointer-events: none;
+    }
+    .loan-amount-input {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 0.72rem 0.8rem 0.72rem 1.65rem;
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: var(--font-ui);
+    }
+    .loan-amount-input:focus {
+      outline: none;
+      border-color: #7ea6ff;
+      box-shadow: 0 0 0 3px rgba(5, 86, 242, 0.35);
+    }
+    .loan-amount-input::-webkit-outer-spin-button,
+    .loan-amount-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .loan-amount-input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .loan-slider {
+      width: 100%;
+      accent-color: #4f8bff;
+      cursor: pointer;
+    }
+    .loan-slider-scale {
+      margin-top: 0.4rem;
+      display: flex;
+      justify-content: space-between;
+      color: #a7bbdf;
+      font-size: 0.75rem;
+    }
+    .hero-main-cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+    }
+    .hero-main-cta .btn {
+      min-width: 170px;
+    }
+    .hero-main-cta .btn-blue {
+      box-shadow: 0 10px 24px rgba(5, 86, 242, 0.35);
+    }
+    .hero-main-cta-note {
+      margin: 0.25rem 0 0;
+      color: #a9bce2;
+      font-size: 0.78rem;
+    }
+
+    .repayment-band {
+      padding: 0 0 2.5rem;
+    }
+    .repayment-band .container {
+      display: flex;
+      justify-content: center;
+      min-width: 0;
+      max-width: 100%;
+    }
+    .repayment-band .mca-calc-shell {
+      width: 100%;
+    }
+
+    /* Dashboard mock */
+    .dash-card {
+      background: var(--bg-soft);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .dash-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+    }
+    .dash-brand { font-weight: 700; color: var(--navy); font-size: 0.9rem; }
+    .dash-balance { font-size: 1.75rem; font-weight: 700; color: var(--navy); }
+    .dash-sub { font-size: 0.85rem; color: var(--text); }
+    .dash-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    .dash-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+    .dash-list .neg { color: #dc2626; font-weight: 600; }
+
+    /* Logo strip */
+    .logo-strip {
+      text-align: center;
+      padding: 2rem 0 3rem;
+      border-top: 1px solid var(--border);
+    }
+    .logo-strip p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      margin-bottom: 1.25rem;
+    }
+    .logo-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem 2.5rem;
+      align-items: center;
+      opacity: 0.65;
+    }
+    .logo-row span {
+      font-family: var(--font-label);
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #5a606a;
+    }
+
+    /* Section common */
+    section { padding: 4rem 0; }
+    .section-head {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 3rem;
+    }
+    .section-head p { margin: 0.5rem 0 0; }
+    .muted { color: var(--text-dim); font-weight: 500; }
+
+    .bg-soft { background: var(--bg-soft); }
+
+    /* Process cards */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .process-grid { grid-template-columns: 1fr; }
+    }
+    .process-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    }
+    .process-card p { margin: 0; font-size: 0.95rem; }
+    .process-visual {
+      margin-top: 1.25rem;
+      min-height: 120px;
+      background: linear-gradient(180deg, var(--bg-muted) 0%, #fff 100%);
+      border-radius: 10px;
+      border: 1px dashed var(--border);
+      display: grid;
+      place-items: center;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* Benefits */
+    .benefits-intro .feature-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      background: var(--bg-soft);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: var(--text-strong);
+    }
+    .pill.is-dark {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 1000px) {
+      .why-grid { grid-template-columns: 1fr; }
+    }
+    .why-col { display: flex; flex-direction: column; gap: 1.5rem; }
+    .why-item {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .why-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      color: var(--navy);
+    }
+    .why-item h3 { margin-bottom: 0.35rem; font-size: 1rem; }
+    .why-item p { margin: 0; font-size: 0.9rem; }
+
+    .why-center {
+      background: var(--bg-soft);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      border: 1px solid var(--border);
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .why-center .eyebrow { justify-content: center; }
+    .why-center h2 { margin-bottom: 0.5rem; }
+    .why-deco {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid var(--border);
+      display: grid;
+      place-items: center;
+      font-size: 0.85rem;
+      color: var(--navy);
+    }
+    .why-deco:nth-child(1) { top: 12%; left: 8%; }
+    .why-deco:nth-child(2) { bottom: 18%; right: 10%; }
+    .why-deco:nth-child(3) { top: 22%; right: 12%; }
+
+    .why-bottom {
+      text-align: center;
+      max-width: 520px;
+      margin: 3rem auto 0;
+    }
+    .why-bottom h3 { font-size: 1.1rem; }
+
+    /* Journey asymmetric */
+    .journey-head { text-align: center; margin-bottom: 2.5rem; }
+    .journey-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .journey-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+    }
+    .journey-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      align-items: center;
+    }
+    .journey-card.tall {
+      grid-row: span 2;
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .journey-card.tall { grid-row: auto; }
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--navy);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+    }
+    .journey-card.tall .step-num { margin-inline: auto; }
+    .journey-card-body p { margin: 0; font-size: 0.95rem; }
+    .cc-mock {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 12px;
+      padding: 1rem;
+      font-size: 0.75rem;
+      font-family: ui-monospace, monospace;
+    }
+    .cc-mock .line { opacity: 0.85; margin-top: 0.5rem; }
+    .financeo-mock {
+      background: var(--bg-soft);
+      border-radius: 12px;
+      padding: 1rem;
+      font-size: 0.7rem;
+      text-align: left;
+    }
+    .financeo-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+    .financeo-tabs span:first-child { color: var(--blue); font-weight: 600; }
+    .row-mini {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Articles */
+    .articles-wrap {
+      background: var(--bg-soft);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2rem;
+    }
+    .articles-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .articles-grid { grid-template-columns: 1fr; }
+    }
+    .article-feature {
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .article-img {
+      height: 200px;
+      background: linear-gradient(120deg, #cbd5e1, #e2e8f0);
+      position: relative;
+    }
+    .article-img::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+    }
+    .article-body { padding: 1.25rem 1.5rem 1.5rem; }
+    .article-meta {
+      font-size: 0.8rem;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+    }
+    .article-body h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+    .article-stack { display: flex; flex-direction: column; gap: 1rem; }
+    .article-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 1rem;
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .article-row .article-img { height: 100%; min-height: 110px; }
+
+    /* FAQ */
+    .faq-list { max-width: 720px; margin: 0 auto; }
+    .faq-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+    }
+    .faq-item strong { color: var(--navy); font-weight: 600; }
+    .faq-item .plus { font-size: 1.5rem; font-weight: 300; color: var(--text); line-height: 1; }
+
+    /* CTA pair */
+    .cta-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    @media (max-width: 700px) {
+      .cta-pair { grid-template-columns: 1fr; }
+    }
+    .cta-card {
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+    }
+    .cta-card.light {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+    }
+    .cta-card.blue-tint {
+      background: var(--blue-tint);
+      border: 1px solid #c7d9f7;
+    }
+    .cta-card h3 { margin-bottom: 0.75rem; }
+    .cta-card p { margin: 0 0 1.25rem; font-size: 0.95rem; }
+    .btn-outline-navy {
+      background: #fff;
+      color: var(--navy);
+      border: 1px solid var(--border);
+    }
+    .btn-navy-fill {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    /* Footer */
+    .site-footer {
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="mcaloan.html">
+        <span class="logo-mark">M</span>
+        MCA Loan
+      </a>
+      <nav>
+        <ul class="nav-main">
+          <li><a class="is-active" href="#">Home</a></li>
+          <li><a class="nav-dd" href="#">Pages <span aria-hidden="true">▾</span></a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="cart-btn" aria-label="Basket">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+          <span class="cart-badge">0</span>
+        </button>
+        <a class="btn btn-primary" href="mcaloan-apply.html">Get a Demo <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/></svg>
+            #1 UK Merchant Cash Advance Provider
+          </p>
+          <h1>Get Funding in 24–48 Hours</h1>
+          <p class="hero-lead">Access fast business funding based on your sales, not your credit score. Compare offers from UK lenders in minutes.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-blue" href="mcaloan-apply.html">Book a Demo <span class="arrow">→</span></a>
+            <a class="btn btn-ghost" href="#">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download App
+            </a>
+          </div>
+        </div>
+        <div class="hero-main-cta" role="region" aria-label="Main funding call to action">
+          <h3>How much are you looking for?</h3>
+          <p>Choose your target funding amount and start your application in under 60 seconds.</p>
+          <div class="loan-amount-box">
+            <label class="loan-amount-label" for="cta-amount-input">Loan amount</label>
+            <div class="loan-amount-input-wrap">
+              <span class="prefix">£</span>
+              <input class="loan-amount-input" type="number" id="cta-amount-input" inputmode="numeric" min="1000" max="1000000" step="1" value="50000" />
+            </div>
+            <input class="loan-slider" type="range" id="cta-amount-slider" min="1000" max="1000000" step="1" value="50000" />
+            <div class="loan-slider-scale">
+              <span>£1,000</span>
+              <strong id="cta-amount-preview">£50,000</strong>
+              <span>£1,000,000</span>
+            </div>
+          </div>
+          <div class="hero-main-cta-actions">
+            <a class="btn btn-blue" href="mcaloan-apply.html">Check eligibility <span class="arrow">→</span></a>
+            <a class="btn btn-ghost" href="#process">How it works</a>
+          </div>
+          <p class="hero-main-cta-note">No impact on your credit score for eligibility check</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="logo-strip">
+      <div class="container">
+        <p>Over 4M+ connected with us!</p>
+        <div class="logo-row">
+          <span>Luminous</span>
+          <span>Command+R</span>
+          <span>Hourglass</span>
+          <span>Lightbox</span>
+          <span>Spherule</span>
+          <span>Capsule</span>
+          <span>Luminous</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="repayment-band">
+      <div class="container">
+        <div class="mca-calc-shell">
+        <div class="mca-calc" id="mca-calc" role="region" aria-label="MCA repayment calculator">
+          <div class="mca-calc-split">
+            <div class="mca-calc-inputs">
+              <h3 class="mca-calc-panel-title">Repayment calculator</h3>
+
+              <div class="mca-slider-block">
+                <p class="mca-slider-caption">Borrow amount: <strong id="mca-disp-advance">£10,000</strong></p>
+                <input
+                  type="range"
+                  class="mca-range"
+                  id="mca-advance"
+                  min="1000"
+                  max="500000"
+                  step="500"
+                  value="10000"
+                  aria-valuemin="1000"
+                  aria-valuemax="500000"
+                  aria-valuenow="10000"
+                  aria-label="Borrow amount"
+                />
+              </div>
+
+              <div class="mca-slider-block">
+                <p class="mca-slider-caption">Average monthly card sales: <strong id="mca-disp-monthly">£32,000</strong></p>
+                <input
+                  type="range"
+                  class="mca-range"
+                  id="mca-monthly-sales"
+                  min="2000"
+                  max="500000"
+                  step="1000"
+                  value="32000"
+                  aria-label="Average monthly card sales"
+                />
+              </div>
+
+              <div class="mca-slider-block">
+                <p class="mca-slider-caption">Payback: <strong id="mca-disp-holdback">13%</strong> of future card sales</p>
+                <input
+                  type="range"
+                  class="mca-range"
+                  id="mca-holdback"
+                  min="5"
+                  max="35"
+                  step="1"
+                  value="13"
+                  aria-label="Percentage of card sales paid toward advance"
+                />
+              </div>
+            </div>
+
+            <div class="mca-calc-divider" aria-hidden="true"></div>
+
+            <div class="mca-calc-results">
+              <p class="mca-results-title">Your results</p>
+              <div class="mca-result-block">
+                <p class="mca-result-value" id="mca-out-total">—</p>
+                <p class="mca-result-hint">Total amount repayable*</p>
+              </div>
+              <div class="mca-result-block">
+                <p class="mca-result-value" id="mca-out-daily">—</p>
+                <p class="mca-result-hint">Daily average repayment (assuming a 30-day month)</p>
+              </div>
+              <div class="mca-result-block">
+                <p class="mca-result-value" id="mca-out-time">—</p>
+                <p class="mca-result-hint">Predicted payback term</p>
+              </div>
+            </div>
+          </div>
+          <div class="mca-get-quotes-wrap">
+            <a
+              class="mca-get-quotes-btn"
+              href="https://preview--document-submit.lovable.app/partner/mcaloan"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Get quotes</a>
+          </div>
+          <p class="mca-calc-note">Illustrative only. Actual terms vary by lender and card volume. Total repayable uses a fixed factor of <strong>1.15×</strong> on the advance. Repayments use your payback % of estimated daily card takings (monthly sales ÷ 30).</p>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-soft" id="process">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow" style="justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Process
+          </p>
+          <h2>How a Merchant Cash Advance Works</h2>
+          <p>Three simple steps from application to funds in your account.</p>
+        </div>
+        <div class="process-grid">
+          <article class="process-card">
+            <h3>Apply in 60 seconds</h3>
+            <p>Tell us about your business and monthly revenue so we can match you quickly.</p>
+            <div class="process-visual">Recurring transfer · team</div>
+          </article>
+          <article class="process-card">
+            <h3>Review and Match</h3>
+            <p>We assess your sales performance and you receive tailored offers from UK funding providers.</p>
+            <div class="process-visual">Card stack · Linda S.</div>
+          </article>
+          <article class="process-card">
+            <h3>Receive your funds</h3>
+            <p>Get funding in as little as 24 to 48 hours once you accept an offer.</p>
+            <div class="process-visual">Portfolio +4.59%</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits-intro">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow" style="justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19l4-8 4 4 4-8 4 8"/></svg>
+            Benefits
+          </p>
+          <h2>Empower <span class="muted">your</span> business with a financial journey</h2>
+          <p>Track expenses and manage your finances effortlessly.</p>
+          <div class="feature-pills">
+            <span class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Funding based on your sales, not just credit</span>
+            <span class="pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Fast access to working capital</span>
+            <span class="pill is-dark">No lengthy bank processes</span>
+          </div>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-col">
+            <div class="why-item">
+              <div class="icon-box" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+              <div>
+                <h3>Funding based on your sales</h3>
+                <p>Your approval is based on business performance, not just your credit history.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="icon-box" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div>
+                <h3>Fast access to capital</h3>
+                <p>Personalise your dashboard to display the information that matters most.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="icon-box" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <div>
+                <h3>An option for businesses with poor credit</h3>
+                <p>If you have been declined elsewhere, you may still be eligible depending on revenue and trading history.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="why-center">
+            <span class="why-deco" aria-hidden="true">🔧</span>
+            <span class="why-deco" aria-hidden="true">👁</span>
+            <span class="why-deco" aria-hidden="true">↗</span>
+            <p class="eyebrow" style="color:var(--blue);">Benefits</p>
+            <h2 style="font-size:1.5rem;">Why businesses choose <span class="muted">MCA</span></h2>
+            <a class="btn btn-blue" href="mcaloan-apply.html" style="margin-top:1rem;">Start free <span class="arrow">→</span></a>
+          </div>
+
+          <div class="why-col">
+            <div class="why-item">
+              <div class="icon-box" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+              <div>
+                <h3>Flexible repayments</h3>
+                <p>Repayments adjust with your daily or weekly revenue.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="icon-box" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></div>
+              <div>
+                <h3>No fixed monthly repayments</h3>
+                <p>Get the funds you need without long bank processes.</p>
+              </div>
+            </div>
+            <div class="why-item">
+              <div class="icon-box" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+              <div>
+                <h3>Use funds for almost any business purpose</h3>
+                <p>From stock and payroll to marketing, repairs, and short-term cashflow support.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="why-bottom">
+          <h3>No lengthy bank process</h3>
+          <p>Avoid the long paperwork, slow underwriting, and rigid criteria often associated with traditional lenders.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow" style="justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            Features
+          </p>
+          <h2>Empower <span class="muted">your</span> financial journey with us!</h2>
+          <p>Track expenses and manage your finances effortlessly.</p>
+        </div>
+
+        <div class="journey-head">
+          <h2 style="font-size:1.75rem;">Journey with us</h2>
+          <p>Track expenses and manage your finances effortlessly.</p>
+        </div>
+
+        <div class="journey-grid">
+          <article class="journey-card">
+            <div class="journey-card-body">
+              <div class="step-num">1</div>
+              <h3>Apply in 60 seconds</h3>
+              <p>Tell us about your business and monthly revenue.</p>
+            </div>
+            <div class="process-visual" style="min-height:100px;margin:0;">Preview</div>
+          </article>
+          <article class="journey-card tall">
+            <div class="step-num">3</div>
+            <h3>Receive your funds</h3>
+            <p>Get funding in as little as 24 to 48 hours.</p>
+            <div class="financeo-mock" style="margin-top:1rem;">
+              <div style="font-weight:700;color:var(--navy);margin-bottom:0.5rem;">Financeo</div>
+              <div class="financeo-tabs"><span>Overview</span><span>Capitalization</span><span>Company</span></div>
+              <div class="row-mini"><span>Jerome Bell</span><span>£12,400</span></div>
+              <div class="row-mini"><span>Guy Hawkins</span><span>£8,200</span></div>
+            </div>
+          </article>
+          <article class="journey-card">
+            <div class="cc-mock">
+              <div>7433 0297 3562 8869</div>
+              <div class="line">Linda Srikandi · $112,411</div>
+            </div>
+            <div class="journey-card-body">
+              <div class="step-num">2</div>
+              <h3>Review and Match</h3>
+              <p>We assess your sales performance and you receive tailored offers from UK funding providers.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container articles-wrap">
+        <div class="section-head">
+          <p class="eyebrow" style="justify-content:center;">Articles</p>
+          <h2>Some articles <span class="muted">about</span> us!</h2>
+        </div>
+        <div class="articles-grid">
+          <article class="article-feature">
+            <div class="article-img" role="img" aria-label="Office"></div>
+            <div class="article-body">
+              <div class="article-meta">Finance · 8 min</div>
+              <h3>Mastering Your Money: Smart Strategies</h3>
+              <p>Discover key investment strategies that help grow your wealth and secure your future.</p>
+            </div>
+          </article>
+          <div class="article-stack">
+            <article class="article-row">
+              <div class="article-img" role="img" aria-label="Laptop"></div>
+              <div class="article-body">
+                <h3>Debt Management Strategies</h3>
+                <p>Turn your free time into extra income with profitable side projects.</p>
+                <div class="article-meta" style="color:var(--text);">Investing · 5 min</div>
+              </div>
+            </article>
+            <article class="article-row">
+              <div class="article-img" role="img" aria-label="Desk"></div>
+              <div class="article-body">
+                <h3>Smart Ways to Save for Retirement</h3>
+                <p>Break down the complexities of the stock market into clear steps.</p>
+                <div class="article-meta" style="color:var(--text);">Budgeting · 10 min</div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow" style="justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            FAQ
+          </p>
+          <h2>Frequently <span class="muted">asked</span> questions!</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item" role="button" tabindex="0">
+            <strong>What are the benefits of using your financial tools?</strong>
+            <span class="plus" aria-hidden="true">+</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta">
+      <div class="container">
+        <div class="cta-pair">
+          <div class="cta-card light">
+            <h3>Get started today</h3>
+            <p>We provide comprehensive financial solutions to help you achieve your goals, with support tailored to your business.</p>
+            <a class="btn btn-outline-navy" href="mcaloan-apply.html">Get Started <span class="arrow">→</span></a>
+          </div>
+          <div class="cta-card blue-tint">
+            <h3>Get started today</h3>
+            <p>We provide comprehensive financial solutions to help you achieve your goals, with support tailored to your business.</p>
+            <a class="btn btn-navy-fill" href="#">Contact Sales <span class="arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="y"></span> MCA Loan. Demo layout recreated for local preview.</p>
+    </div>
+  </footer>
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    (function () {
+      var MCA_FIXED_FACTOR = 1.15;
+      var gbp = new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 });
+      var gbpDec = new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      function el(id) {
+        return document.getElementById(id);
+      }
+
+      function updateMcaLabels() {
+        var advance = parseFloat(el("mca-advance").value);
+        var monthly = parseFloat(el("mca-monthly-sales").value);
+        var holdback = parseFloat(el("mca-holdback").value);
+        var da = el("mca-disp-advance");
+        var dm = el("mca-disp-monthly");
+        var dh = el("mca-disp-holdback");
+        if (da) da.textContent = gbp.format(isFinite(advance) ? Math.round(advance) : 0);
+        if (dm) dm.textContent = gbp.format(isFinite(monthly) ? Math.round(monthly) : 0);
+        if (dh) dh.textContent = (isFinite(holdback) ? Math.round(holdback) : 0) + "%";
+      }
+
+      function updateMcaCalc() {
+        updateMcaLabels();
+
+        var advance = parseFloat(el("mca-advance").value);
+        var factor = MCA_FIXED_FACTOR;
+        var holdback = parseFloat(el("mca-holdback").value);
+        var monthlySales = parseFloat(el("mca-monthly-sales").value);
+
+        if (!isFinite(advance) || advance < 0) advance = 0;
+        if (!isFinite(holdback) || holdback < 0) holdback = 0;
+        if (!isFinite(monthlySales) || monthlySales < 0) monthlySales = 0;
+
+        var dailySales = monthlySales / 30;
+
+        var totalRepay = advance * factor;
+        var dailyRemit = dailySales * (holdback / 100);
+        var days = dailyRemit > 0 ? Math.ceil(totalRepay / dailyRemit) : null;
+
+        el("mca-out-total").textContent =
+          totalRepay > 0 ? gbpDec.format(totalRepay) : "—";
+        el("mca-out-daily").textContent =
+          dailyRemit > 0 ? gbpDec.format(dailyRemit) : "—";
+
+        if (days === null || !isFinite(days) || totalRepay <= 0) {
+          el("mca-out-time").textContent = "—";
+        } else if (days > 365 * 5) {
+          el("mca-out-time").textContent = "5+ years (check inputs)";
+        } else if (days < 120) {
+          el("mca-out-time").textContent = days + " days";
+        } else {
+          var months = days / 30.44;
+          el("mca-out-time").textContent = Math.round(months * 10) / 10 + " months (~" + days + " days)";
+        }
+      }
+
+      ["mca-advance", "mca-holdback", "mca-monthly-sales"].forEach(function (id) {
+        el(id).addEventListener("input", updateMcaCalc);
+        el(id).addEventListener("change", updateMcaCalc);
+      });
+      updateMcaCalc();
+
+      var amountInput = el("cta-amount-input");
+      var amountSlider = el("cta-amount-slider");
+      var amountPreview = el("cta-amount-preview");
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function parseSafeInt(value, fallback) {
+        var parsed = parseInt(value, 10);
+        return isFinite(parsed) ? parsed : fallback;
+      }
+
+      function syncAmountFromSlider() {
+        var value = parseSafeInt(amountSlider.value, 1000);
+        amountInput.value = value;
+        amountPreview.textContent = gbp.format(value);
+      }
+
+      // Allow free typing; only constrain to min/max.
+      function syncAmountFromInputLive() {
+        var min = parseSafeInt(amountSlider.min, 1000);
+        var max = parseSafeInt(amountSlider.max, 1000000);
+        var raw = parseSafeInt(amountInput.value, min);
+        var value = clamp(raw, min, max);
+
+        amountPreview.textContent = gbp.format(value);
+        amountSlider.value = value;
+      }
+
+      // Normalize the typed value after user commits the field.
+      function normalizeInputOnCommit() {
+        var min = parseSafeInt(amountSlider.min, 1000);
+        var max = parseSafeInt(amountSlider.max, 1000000);
+        var raw = parseSafeInt(amountInput.value, min);
+        var value = clamp(raw, min, max);
+        amountInput.value = value;
+        amountSlider.value = value;
+        amountPreview.textContent = gbp.format(value);
+      }
+
+      amountSlider.addEventListener("input", syncAmountFromSlider);
+      amountInput.addEventListener("input", syncAmountFromInputLive);
+      amountInput.addEventListener("change", normalizeInputOnCommit);
+      amountInput.addEventListener("blur", normalizeInputOnCommit);
+      syncAmountFromInputLive();
+    })();
+  </script>
+</body>
+</html>

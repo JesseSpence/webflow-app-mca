@@ -1,3 +1,115 @@
+# MCA Loan Content App (Phase 1)
+
+This project is a Next.js App Router application that renders SEO pages from Supabase and accepts workflow publishing payloads through authenticated API routes.
+
+## Quick start
+
+1. Copy `.env.example` to `.env.local`.
+2. Fill in Supabase and API token values.
+3. Apply DB migration in `supabase/migrations/0001_phase1_content_schema.sql`.
+4. Optionally run seed script in `supabase/seed/phase1_seed.sql`.
+5. Start dev server:
+
+```bash
+npm run dev
+```
+
+## API contracts for workflow handoff
+
+All write endpoints require:
+
+`Authorization: Bearer <INTERNAL_API_BEARER_TOKEN>`
+
+### Upsert page
+
+`POST /api/pages/upsert`
+
+```json
+{
+  "slug": "same-day",
+  "full_path": "/types/same-day",
+  "page_template": "type",
+  "page_group": "types",
+  "title": "Same Day Merchant Cash Advance | MCA Loan UK",
+  "meta_title": "Same Day Merchant Cash Advance | MCA Loan UK",
+  "meta_description": "Learn how same day merchant cash advance funding works.",
+  "h1": "Same Day Merchant Cash Advance",
+  "intro_html": "<p>...</p>",
+  "body_html": "<section>...</section>",
+  "canonical_url": "https://mcaloan.co.uk/types/same-day",
+  "status": "published",
+  "indexable": true,
+  "publish_mode": "page"
+}
+```
+
+### Upsert section
+
+`POST /api/pages/section`
+
+```json
+{
+  "target_page_slug": "restaurant",
+  "section_key": "cashflow_gaps",
+  "heading": "Common Restaurant Cashflow Gaps",
+  "content_html": "<p>...</p>",
+  "keyword_theme": "restaurant cash flow",
+  "sort_order": 2
+}
+```
+
+### Add FAQ
+
+`POST /api/pages/faq`
+
+```json
+{
+  "target_page_slug": "restaurant",
+  "question": "Can restaurants get an MCA with bad credit?",
+  "answer_html": "<p>...</p>",
+  "schema_enabled": true,
+  "keyword": "restaurant MCA bad credit"
+}
+```
+
+### Publish page
+
+`POST /api/pages/publish`
+
+```json
+{
+  "slug": "restaurant"
+}
+```
+
+### Revalidate route
+
+`POST /api/revalidate`
+
+```json
+{
+  "full_path": "/sectors/restaurant"
+}
+```
+
+### Get page data
+
+`GET /api/pages/[slug]`
+
+### Keyword decision ingest
+
+`POST /api/keywords/upsert`
+
+```json
+{
+  "keyword": "merchant cash advance for restaurants",
+  "mapped_page_slug": "restaurant",
+  "live_decision": "live",
+  "usage_type": "section_only",
+  "notes": "Merge into sector page",
+  "source_cluster": "sector_restaurant"
+}
+```
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

@@ -7,6 +7,17 @@ import { NextResponse, type NextRequest } from "next/server";
  */
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
+  const { pathname } = request.nextUrl;
+  const adminBase = pathname.startsWith("/pages/admin")
+    ? "/pages/admin"
+    : pathname.startsWith("/admin")
+      ? "/admin"
+      : null;
+
+  // Safety guard: only run auth redirects on known admin paths.
+  if (!adminBase) {
+    return supabaseResponse;
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,19 +45,17 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
-  const isLoginPage = pathname === "/admin/login";
-  const isAdminRoute = pathname.startsWith("/admin");
+  const isLoginPage = pathname === `${adminBase}/login`;
 
-  if (isAdminRoute && !isLoginPage && !user) {
+  if (!isLoginPage && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin/login";
+    url.pathname = `${adminBase}/login`;
     return NextResponse.redirect(url);
   }
 
   if (isLoginPage && user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin";
+    url.pathname = adminBase;
     return NextResponse.redirect(url);
   }
 
@@ -54,5 +63,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/pages/admin/:path*"],
 };

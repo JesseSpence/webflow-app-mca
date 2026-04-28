@@ -7,7 +7,9 @@ import { NextResponse, type NextRequest } from "next/server";
  */
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
-  const { pathname } = request.nextUrl;
+  const normalizePath = (path: string) =>
+    path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+  const pathname = normalizePath(request.nextUrl.pathname);
   const adminBase = pathname.startsWith("/pages/admin")
     ? "/pages/admin"
     : pathname.startsWith("/admin")
@@ -45,18 +47,27 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isLoginPage = pathname === `${adminBase}/login`;
+  const loginPath = `${adminBase}/login`;
+  const isLoginPage = pathname === loginPath;
 
   if (!isLoginPage && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = `${adminBase}/login`;
-    return NextResponse.redirect(url);
+    url.pathname = loginPath;
+    const redirectPath = normalizePath(url.pathname);
+    if (redirectPath !== pathname) {
+      return NextResponse.redirect(url);
+    }
+    return supabaseResponse;
   }
 
   if (isLoginPage && user) {
     const url = request.nextUrl.clone();
     url.pathname = adminBase;
-    return NextResponse.redirect(url);
+    const redirectPath = normalizePath(url.pathname);
+    if (redirectPath !== pathname) {
+      return NextResponse.redirect(url);
+    }
+    return supabaseResponse;
   }
 
   return supabaseResponse;
